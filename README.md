@@ -30,4 +30,4 @@ Add a block so the list cant be deleted.
 
 
 ##  👁️‍🗨️ PREVIEW
-![Captura de pantalla 2022-05-07 130653](https://user-images.githubusercontent.com/102654586/167251640-79b93ebb-de91-4990-a77b-70080ea13f6b.png)
+![image](https://user-images.githubusercontent.com/102654586/170436276-3b705e26-15de-46bc-9271-371df1f9d084.png)
