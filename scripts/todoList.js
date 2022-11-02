@@ -29,9 +29,11 @@ function showTodo() {
                                 }${todo[i].text} ${
       todo[i].complete ? "</span>" : ""
     }
+                              <div class="space">
                                 <a class="btn-edit" onclick="editTodo(${i})"><i class="fa-solid fa-pen-to-square fa-xs"></i></a>
                                 <a class="btn-delete" onclick="deleteTodo(${i})"><i class="fa-solid fa-trash fa-xs"></i></a>
                                 <a class="btn-check" onclick="completeTodo(${i})"><i class="fa-solid fa-check fa-xs"></i></a>
+                              </div>
                              </li>`;
   }
 }
