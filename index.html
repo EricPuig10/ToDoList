@@ -1,27 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Intro JS</title>
-    <link rel="stylesheet" href="./styles/index.css">
-    <script src="https://kit.fontawesome.com/13bfd11a9a.js" crossorigin="anonymous"></script>
-    
-</head>
-<body>
-
-<div class="container">
-   <h1>ToDoList Dinàmic</h1>
-   <input id=todoInput type=text> 
-   <button id="addButton"> Add To Do </button>
-<div class="toDo">
-        <ul id="App">
-            <li class="liClass">{todo1}</li>
-        </ul>
+    <link rel="stylesheet" href="style.css" />
+    <script
+      src="https://kit.fontawesome.com/13bfd11a9a.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="frame">
+        <h3 class="title">Todolist</h3>
+        <form id="form-todo" class="form">
+          <input type="text" id="input-todo" />
+          <button id="btn-add">Add</button>
+        </form>
+        <div class="sort-todo">
+          <button id="btn-sort">Click to sort todo's completed</button>
+        </div>
+        <ul id="todo-list"></ul>
+      </div>
     </div>
-</div>
-<script src="./scripts/index.js" type="module"></script>
-</body>
+    <script src="./scripts/todoList.js"></script>
+  </body>
 </html>
-

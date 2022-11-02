@@ -1,81 +1,131 @@
-export const todoList ={
-    state:[
-      {
-        id: 1,
-        task: "Estudiar",
-        state: "un-blocked",
-        isDone: "",
-      },
-      {
-        id: 2,
-        task: "Practicar katas",
-        state: "un-blocked",
-      },
-      {
-        id: 3,
-        task:  "Estudiar bases de dades relacionades",
-        state: "un-blocked",
-      },
-    ],
+const BtnAdd = document.querySelector("#btn-add"),
+  BtnSort = document.querySelector("#btn-sort"),
+  todoInput = document.querySelector("#input-todo"),
+  todoList = document.querySelector("#todo-list"),
+  data = storageTodo("todo");
 
-    addTodo(newTodo){
-        this.state.push(newTodo);
-        this.render();
-    },
-  
-    deleteByIndex(index){
-      this.state.splice(index,1);
-      console.log (todoList.state)
-      this.render()
-    },
-    //identificar el boto que apreto i crear un input a la llista corresponent per poder editar text. 
-    //agafar el valor del input i cambiarlo a l'hora de fer el push del newtodo
+let todo = data ? data : [],
+  mode = "add",
+  todoId = "";
 
+// add event for BtnAdd to funtion addTodo
+BtnAdd.addEventListener("click", addTodo);
+// add event for BtnAdd to function Sort todo by completed
+BtnSort.addEventListener("click", sortByCompleted);
 
-    editByIndex(index, parentContainer){
-      console.log(index,parentContainer)
+if (todo.length) {
+  showTodo();
+}
 
-      parentContainer.innerHTML=(`<div class="edit_container">
-      <button id=${index} class="edit_back_arrow"><i class="fa-solid fa-arrow-left"></i></button>
-      <input id="edit_input" type="text" placeholder="No hi ha res per editar" 
-      value=""/>
-      <button id=${index} class="button_save"><i class="fa-solid fa-circle-check"></i></button>
-      <button id=${index} class="button_close"><i class="fa-solid fa-xmark fa-lg"></i></button>
-      </div>`);
-      // fer el render un cop editat (save) o cancel·lat edició (close), no abans.
-    },
+// show todo with lopping create element
+function showTodo() {
+  todoList.innerHTML = "";
+  for (let i = 0; i < todo.length; i++) {
+    todoList.innerHTML += `<li class="item">
+                                ${
+                                  todo[i].complete
+                                    ? '<span class="checked">'
+                                    : '<span class="unchecked">'
+                                }${todo[i].text} ${
+      todo[i].complete ? "</span>" : ""
+    }
+                                <a class="btn-edit" onclick="editTodo(${i})"><i class="fa-solid fa-pen-to-square fa-xs"></i></a>
+                                <a class="btn-delete" onclick="deleteTodo(${i})"><i class="fa-solid fa-trash fa-xs"></i></a>
+                                <a class="btn-check" onclick="completeTodo(${i})"><i class="fa-solid fa-check fa-xs"></i></a>
+                             </li>`;
+  }
+}
 
+// add todo and update todo with another function
+function addTodo(e) {
+  e.preventDefault();
+  let val = todoInput.value;
 
-    render(){
-      let html= '';
-  
-      for (const todo of this.state){
-        html += `<div class=liDiv> 
-                    <div class=content><li> ${todo.task} </li></div>
-                    <button id=${this.state.indexOf(todo)} class="deleteButton"><i class="fa-solid fa-trash-can"></i></button> 
-                    <button id=${this.state.indexOf(todo)} class="editButton"><i class="fa-solid fa-pen-to-square"></i></button> 
-                    <button id=${this.state.indexOf(todo)} class="blockButton"><i class="fa-solid fa-lock"></i></button>
-                  
-                  </div>`;
-                
-      }
-      
-  
-      let DOMlist = document.getElementById("App");
-      DOMlist.innerHTML = html;
+  if (val === "") {
+    alert("empty todo not allowed!");
+  } else if (mode === "add") {
+    todo.push({
+      text: val,
+      complete: false,
+    });
+    storageTodo("todo", todo, true);
+  } else if (mode === "edit") {
+    editedTodo(todoId, val);
+    storageTodo("todo", todo, true);
+  }
 
-      let buttons = document.querySelectorAll(".deleteButton");
-      buttons.forEach((deleteButton) => {
-        deleteButton.addEventListener("click", (e) => this.deleteByIndex(e.target.id) )
-      });
+  mode = "add";
+  BtnAdd.innerHTML = "add";
+  todoId = "";
+  todoInput.value = "";
+  showTodo();
+  // console.log(todoInput.value);
+}
 
-      let buttonsEdit = document.querySelectorAll(".editButton");
-      buttonsEdit.forEach((editButton) => {
-        editButton.addEventListener("click", (e) => this.editByIndex(e.target.id,e.target.parentElement))
-      });
-    },
-  };
-  
-  todoList.render();
+// find index todo berfore execute
+function editTodo(i) {
+  if (todo[i].complete === true) {
+    alert("todo han been completed!");
+  } else {
+    mode = "edit";
+    BtnAdd.innerHTML = "edit";
+    todoId = i;
+    todoInput.value = todo[i].text;
+    console.log(todo[i]);
+  }
+}
 
+// execute edit todo
+function editedTodo(i, newTodo) {
+  todo.splice(i, 1, {
+    ...todo[i],
+    text: newTodo,
+  });
+  showTodo();
+}
 
+// delete todo
+function deleteTodo(i) {
+  if (confirm(`Are you sure to delete todo ${todo[i].text}?`)) {
+    todo.splice(i, 1);
+    storageTodo("todo", todo, true);
+  }
+  showTodo();
+}
+
+// function to completed todo
+function completeTodo(i) {
+  if (todo[i].complete === false) {
+    if (confirm(`click okay if you've been completed todo ${todo[i].text} !`)) {
+      todo[i].complete = true;
+      storageTodo("todo", todo, true);
+    }
+  } else {
+    alert(`todo ${todo[i].text} has been completed !`);
+  }
+  showTodo();
+}
+
+// function to sort todo by completed todo
+function sortByCompleted(i) {
+  if (todo == "") {
+    alert("you do not have any todo to sort !");
+  } else {
+    todo.sort(function (a, b) {
+      return a.complete - b.complete;
+    });
+  }
+  console.log(todo);
+  storageTodo("todo", todo, true);
+  showTodo();
+}
+
+// get and set todo
+function storageTodo(name, data = null, set = false) {
+  if (set) {
+    localStorage.setItem(name, JSON.stringify(data));
+    return true;
+  } else {
+    return JSON.parse(localStorage.getItem(name));
+  }
+}
